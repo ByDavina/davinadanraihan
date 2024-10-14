@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RADA'S CAFE - Formulir Pemesanan</title>
+    <style>
+        body {
+            background-color: #add8e6; /* Warna biru untuk background */
+            background-image: url('https://i.pinimg.com/originals/60/63/da/6063da107454d50c1d7786cc2c2bac75.jpg'); /* Corak bunga */
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 20px; /* Menambahkan padding untuk scroll */
+            box-sizing: border-box;
+        }
+        .form-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto; /* Center the form */
+            overflow-y: auto; /* Enable vertical scrolling */
+            max-height: 90vh; /* Limit height */
+        }
+        h2 {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #000; /* Warna hitam untuk judul */
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"], input[type="tel"], input[type="email"], input[type="time"], textarea, select, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            background-color: #ff6347;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        input[type="submit"]:hover {
+            background-color: #e5533d;
+        }
+        #thankYouMessage {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background-color: #007bff; /* Warna latar belakang biru */
+            color: #fff; /* Warna teks putih */
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        #thankYouMessage img {
+            max-width: 100%; /* Responsif */
+            height: auto; /* Responsif */
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>RADA'S CAFE</h2>
+        <form id="orderForm">
+            <!-- 1. Nama pelanggan -->
+            <label for="name">1. Nama Anda:</label>
+            <input type="text" id="name" name="name" required>
+
+            <!-- 2. Nomor telepon -->
+            <label for="phone">2. Nomor Telepon:</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <!-- 3. Alamat -->
+            <label for="address">3. Alamat:</label>
+            <input type="text" id="address" name="address" required>
+
+            <!-- 4. Waktu pemesanan -->
+            <label for="order_time">4. Waktu yang Diinginkan untuk Pengambilan/Pengantaran:</label>
+            <input type="time" id="order_time" name="order_time" required>
+
+            <!-- 5. Jenis pesanan -->
+            <label for="order_type">5. Jenis Pesanan:</label>
+            <select id="order_type" name="order_type" required>
+                <option value="dine_in">Makan di Tempat</option>
+                <option value="take_away">Bawa Pulang</option>
+                <option value="delivery">Pengantaran</option>
+            </select>
+
+            <!-- 6. Pilihan makanan dengan checklist -->
+            <label for="food">6. Pilihan Makanan dan Jumlah:</label>
+            <input type="checkbox" name="food[]" value="roti bakar"> Roti Bakar
+            <input type="number" name="quantity[roti bakar]" placeholder="Jumlah Roti Bakar">
+
+            <input type="checkbox" name="food[]" value="cupcake"> Cupcake
+            <input type="number" name="quantity[cupcake]" placeholder="Jumlah Cupcake">
+
+            <input type="checkbox" name="food[]" value="kentang goreng"> Kentang Goreng
+            <input type="number" name="quantity[kentang goreng]" placeholder="Jumlah Kentang Goreng">
+
+            <input type="checkbox" name="food[]" value="sandwich"> Sandwich
+            <input type="number" name="quantity[sandwich]" placeholder="Jumlah Sandwich"><br>
+
+            <input type="checkbox" name="food[]" value="cookies"> Cookies
+            <input type="number" name="quantity[cookies]" placeholder="Jumlah Cookies"><br>
+
+            <!-- 7. Pilihan minuman dengan checklist -->
+            <label for="drink">7. Pilihan Minuman dan Jumlah:</label>
+            <input type="checkbox" name="drink[]" value="matcha latte"> Matcha Latte
+            <input type="number" name="quantity[matcha latte]" placeholder="Jumlah Matcha Latte">
+
+            <input type="checkbox" name="drink[]" value="kopi susu"> Kopi Susu
+            <input type="number" name="quantity[kopi susu]" placeholder="Jumlah Kopi Susu">
+
+            <input type="checkbox" name="drink[]" value="americano"> Americano
+            <input type="number" name="quantity[americano]" placeholder="Jumlah Americano">
+
+            <input type="checkbox" name="drink[]" value="susu coklat"> Susu Coklat
+            <input type="number" name="quantity[susu coklat]" placeholder="Jumlah Susu Coklat"><br>
+
+            <input type="checkbox" name="drink[]" value="es teh manis"> Es Teh Manis
+            <input type="number" name="quantity[es teh manis]" placeholder="Jumlah Es Teh Manis"><br>
+
+            <!-- 8. Metode pembayaran -->
+            <label for="payment_method">8. Metode Pembayaran yang Diinginkan:</label>
+            <select id="payment_method" name="payment_method" required onchange="showDigitalPaymentOptions(this)">
+                <option value="cash">Tunai</option>
+                <option value="digital_wallet">Dompet Digital</option>
+            </select>
+
+            <!-- Opsi dompet digital muncul hanya jika dipilih -->
+            <div id="digital_options" style="display:none;">
+                <input type="radio" name="digital_wallet" value="ovo"> OVO<br>
+                <input type="radio" name="digital_wallet" value="gopay"> GoPay<br>
+                <input type="radio" name="digital_wallet" value="shopee_pay"> Shopee Pay<br>
+                <input type="radio" name="digital_wallet" value="dana"> Dana<br>
+            </div>
+
+            <script>
+                function showDigitalPaymentOptions(payment) {
+                    document.getElementById('digital_options').style.display = payment.value === "digital_wallet" ? 'block' : 'none';
+                }
+            </script>
+
+            <!-- 9. Instruksi tambahan -->
+            <label for="additional_instructions">9. Instruksi Tambahan (opsional):</label>
+            <textarea id="additional_instructions" name="additional_instructions" rows="4" placeholder="Instruksi khusus untuk persiapan atau pengantaran?"></textarea>
+
+            <!-- 10. Rating restoran -->
+            <label for="rating">10. Bagaimana Anda menilai pengalaman Anda dengan restoran kami?</label><br>
+            <input type="radio" name="rating" value="1"> ★
+            <input type="radio" name="rating" value="2"> ★★
+            <input type="radio" name="rating" value="3"> ★★★
+            <input type="radio" name="rating" value="4"> ★★★★
+            <input type="radio" name="rating" value="5"> ★★★★★
+
+            <!-- Submit button -->
+            <input type="submit" value="Pesan Sekarang">
+        </form>
+    </div>
+
+    <div id="thankYouMessage">
+        <h2>Terima Kasih Sudah Memesan di RADA'S Café</h2>
+    </div>
+
+    <script>
+        document.getElementById('orderForm').onsubmit = function(event) {
+            event.preventDefault(); // Mencegah pengiriman form default
+            document.querySelector('.form-container').style.display = 'none'; // Sembunyikan form
+            document.getElementById('thankYouMessage').style.display = 'block'; // Tampilkan pesan terima kasih
+        };
+    </script>
+</body>
+</html>
